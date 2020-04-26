@@ -1,0 +1,459 @@
+import pymongo
+
+#Create a database called "mydatabase":
+
+>>> client = pymongo.MongoClient("mongodb+srv://pp2:pp2password@cluster0-en7rv.mongodb.net/test?retryWrites=true&w=majority")
+>>> mydb = client["mydatabase"]
+>>> print(client.list_database_names())
+['mydatabase', 'sample_airbnb', 'sample_analytics', 'sample_geospatial', 'sample_mflix', 'sample_supplies', 'sample_training', 'sample_weatherdata', 'admin', 'local']
+
+#Create a collection called "students":
+
+>>> mydb = client['mydatabase']
+>>> mycol = mydb["students"]
+
+#Insert a record in the "students" collection:
+
+>>> mydict = {"name":"Aruzhan","surname":"Akimzhanova","id":"19BD"}
+>>> x = mycol.insert_one(mydict)
+>>> x.inserted_id
+ObjectId('5ea4ea58ee4aa818021e5c30')
+>>> mydb.list_collection_names()
+['students']
+>>> mylist = [
+...   { "name": "Amy", "address": "Apple st 652"},
+...   { "name": "Hannah", "address": "Mountain 21"},
+...   { "name": "Michael", "address": "Valley 345"},
+...   { "name": "Sandy", "address": "Ocean blvd 2"},
+...   { "name": "Betty", "address": "Green Grass 1"},
+...   { "name": "Richard", "address": "Sky st 331"},
+...   { "name": "Susan", "address": "One way 98"},
+...   { "name": "Vicky", "address": "Yellow Garden 2"},
+...   { "name": "Ben", "address": "Park Lane 38"},
+...   { "name": "William", "address": "Central st 954"},
+...   { "name": "Chuck", "address": "Main Road 989"},
+...   { "name": "Viola", "address": "Sideway 1633"}
+... ]
+
+>>> x = mycol.insert_many(mylist)
+>>> mylist = [
+...   { "name": "Amy", "address": "Apple st 652"},
+...   { "name": "Hannah", "address": "Mountain 21"},
+...   { "name": "Michael", "address": "Valley 345"},
+...   { "name": "Sandy", "address": "Ocean blvd 2"},
+...   { "name": "Betty", "address": "Green Grass 1"},
+...   { "name": "Richard", "address": "Sky st 331"},
+...   { "name": "Susan", "address": "One way 98"},
+...   { "name": "Vicky", "address": "Yellow Garden 2"},
+...   { "name": "Ben", "address": "Park Lane 38"},
+...   { "name": "William", "address": "Central st 954"},
+...   { "name": "Chuck", "address": "Main Road 989"},
+...   { "name": "Viola", "address": "Sideway 1633"}
+... ]
+>>> mycol.insert_many(mylist)
+<pymongo.results.InsertManyResult object at 0x01100DA8>
+
+Find the first document in the customers collection:
+
+>>> x = mycol.find_one()
+>>> x
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+
+Find All:
+>>> students = mycol.find()
+>>> students
+<pymongo.cursor.Cursor object at 0x03DB1A78>
+>>> for x in students:
+...   print(x)
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50b'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+
+>>> for x in students:
+...   print(x['name'])
+...
+>>> students = mycol.find()
+>>> for x in students:
+...   print(x['name'])
+...
+Aruzhan
+Amy
+Hannah
+Michael
+Sandy
+Betty
+Richard
+Susan
+Vicky
+Ben
+William
+Chuck
+Viola
+Aruzhan
+Amy
+Hannah
+Michael
+Sandy
+Betty
+Richard
+Susan
+Vicky
+Ben
+William
+Chuck
+Viola
+Amy
+Hannah
+Michael
+Sandy
+Betty
+Richard
+Susan
+Vicky
+Ben
+William
+Chuck
+Viola
+
+Return only the names and addresses, not the _ids:
+>>> students =  mycol.find({},{ "_id": 0, "name": 1, "address": 1 })
+>>> for x in students:
+...   x
+...
+{'name': 'Aruzhan'}
+{'name': 'Amy', 'address': 'Apple st 652'}
+{'name': 'Hannah', 'address': 'Mountain 21'}
+{'name': 'Michael', 'address': 'Canyon 123'}
+{'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'name': 'Betty', 'address': 'Green Grass 1'}
+{'name': 'Richard', 'address': 'Sky st 331'}
+{'name': 'Susan', 'address': 'One way 98'}
+{'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'name': 'Ben', 'address': 'Park Lane 38'}
+{'name': 'William', 'address': 'Central st 954'}
+{'name': 'Chuck', 'address': 'Main Road 989'}
+{'name': 'Viola', 'address': 'Sideway 1633'}
+{'name': 'Aruzhan'}
+{'name': 'Amy', 'address': 'Apple st 652'}
+{'name': 'Hannah', 'address': 'Mountain 21'}
+{'name': 'Michael', 'address': 'Valley 345'}
+{'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'name': 'Betty', 'address': 'Green Grass 1'}
+{'name': 'Richard', 'address': 'Sky st 331'}
+{'name': 'Susan', 'address': 'One way 98'}
+{'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'name': 'Ben', 'address': 'Park Lane 38'}
+{'name': 'William', 'address': 'Central st 954'}
+{'name': 'Chuck', 'address': 'Main Road 989'}
+{'name': 'Viola', 'address': 'Sideway 1633'}
+{'name': 'Amy', 'address': 'Apple st 652'}
+{'name': 'Hannah', 'address': 'Mountain 21'}
+{'name': 'Michael', 'address': 'Valley 345'}
+{'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'name': 'Betty', 'address': 'Green Grass 1'}
+{'name': 'Richard', 'address': 'Sky st 331'}
+{'name': 'Susan', 'address': 'One way 98'}
+{'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'name': 'Ben', 'address': 'Park Lane 38'}
+{'name': 'William', 'address': 'Central st 954'}
+{'name': 'Chuck', 'address': 'Main Road 989'}
+{'name': 'Viola', 'address': 'Sideway 1633'}
+
+>>> query = {"name":"Aruzhan"}
+>>> students = mycol.find(query)
+>>> for x in students:
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+
+Find documents where the address starts with the letter "S" or higher:
+
+>>> query = { "address": { "$gt": "S" } }
+>>> query
+{'address': {'$gt': 'S'}}
+>>> students = mycol.find(query)
+>>> for x in students:
+...   print(x)
+...
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+
+>>> query = { "address": { "$regex": "^S" } }
+>>> query
+{'address': {'$regex': '^S'}}
+>>> students = mycol.find(query)
+>>> for x in students:
+...   x
+...
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+
+Sort the result alphabetically by name:
+>>> students = mycol.find().sort("name")
+>>> for x in students:
+...   x
+...
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50b'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+
+
+Sort the result reverse alphabetically by name:
+>>> students = mycol.find().sort("name", -1).sort("adress")
+>>> for x in students:
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50b'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+
+Delete the document with the address "Mountain 21":
+>>> query = { "address": "Mountain 21" }
+>>> mycol.delete_one(query)
+<pymongo.results.DeleteResult object at 0x010D9C88>
+>>> for x in mycol.find():
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50f'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf515'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c36'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3c'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c42'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c48'), 'name': 'Viola', 'address': 'Sideway 1633'}
+
+>>> query = { "address": {"$regex": "^S"} }
+>>> x = mycol.delete_many(query)
+>>> for x in mycol.find():
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+
+Change the address from "Valley 345" to "Canyon 123":
+
+>>> query = { "address": "Valley 345" }
+>>> newvalues = { "$set": { "address": "Canyon 123" } }
+>>> mycol.update_one(query, newvalues)
+<pymongo.results.UpdateResult object at 0x01100788>
+>>> for x in mycol.find():
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50d'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50e'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf510'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf511'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf512'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf513'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf514'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ea58ee4aa818021e5c30'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'id': '19BD'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c31'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c32'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c33'), 'name': 'Michael', 'address': 'Canyon 123'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c34'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c35'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c37'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c38'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c39'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3a'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4eb9eee4aa818021e5c3b'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3d'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3e'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c3f'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c40'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c41'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c43'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c44'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c45'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c46'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('5ea4ec56ee4aa818021e5c47'), 'name': 'Chuck', 'address': 'Main Road 989'}
+
+Limit the Result:
+>>> for x in mycol.find().limit(3):
+...   x
+...
+{'_id': ObjectId('5ea1b6bf7ae373b8d0cbf509'), 'name': 'Aruzhan', 'surname': 'Akimzhanova', 'ID': '19BD'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50a'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('5ea1bcc67ae373b8d0cbf50c'), 'name': 'Michael', 'address': 'Canyon 123'}
